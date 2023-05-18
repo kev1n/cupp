@@ -118,6 +118,7 @@ def komb(seq, start, special=""):
 
 
 def print_to_file(filename, unique_list_finished):
+    print(unique_list_finished)
     f = open(filename, "w")
     unique_list_finished.sort()
     f.write(os.linesep.join(unique_list_finished))
@@ -127,14 +128,14 @@ def print_to_file(filename, unique_list_finished):
     for line in f:
         lines += 1
     f.close()
-    print(
+    """ print(
         "[+] Saving dictionary to \033[1;31m"
         + filename
         + "\033[1;m, counting \033[1;31m"
         + str(lines)
         + " words.\033[1;m"
-    )
-    inspect = input("> Hyperspeed Print? (Y/n) : ").lower()
+    ) """
+    """ inspect = input("> Hyperspeed Print? (Y/n) : ").lower()
     if inspect == "y":
         try:
             with open(filename, "r+") as wlist:
@@ -146,13 +147,13 @@ def print_to_file(filename, unique_list_finished):
         except Exception as e:
             print("[ERROR]: " + str(e))
     else:
-        pass
+        pass """
 
-    print(
+    """ print(
         "[+] Now load your pistolero with \033[1;31m"
         + filename
         + "\033[1;m and shoot! Good luck!"
-    )
+    ) """
 
 
 def print_cow():
@@ -372,6 +373,57 @@ def interactive():
 
     generate_wordlist_from_profile(profile)  # generate the wordlist
 
+def noninteractive(name, profileSurname, profileNick, profileBirthdate, profileWife, profileWifeNick, profileWifeBirthdate, profileKid, profileKidNick, profileKidBirthdate, profilePet, profileCompany, profileWords, profileSpechars1, profileRandnum, profileLeetmode):
+    """Implementation of the -i switch. Interactively question the user and
+    create a password dictionary file based on the answer."""
+
+    print("\r\n[+] Insert the information about the victim to make a dictionary")
+    print("[+] If you don't know all the info, just hit enter when asked! ;)\r\n")
+
+    # We need some information first!
+
+    profile = {}
+
+    profile["name"] = name.lower()
+
+    profile["surname"] = profileSurname.lower()
+    profile["nick"] = profileNick.lower()
+    profile["birthdate"] = str(profileBirthdate)
+
+    profile["wife"] = profileWife.lower()
+    profile["wifen"] = profileWifeNick.lower()
+    profile["wifeb"] = str(profileWifeBirthdate)
+
+    profile["kid"] = profileKid.lower()
+    profile["kidn"] = profileKidNick.lower()
+
+    profile["kidb"] = str(profileKidBirthdate)
+
+    profile["pet"] = profilePet.lower()
+    profile["company"] = profileCompany.lower()
+
+    if profileWords:
+        profile["words"] = profileWords.split(",")
+    else:
+        profile["words"] = [""]
+
+    if profileSpechars1:
+        profile["spechars1"] = "y"
+    else:
+        profile["spechars1"] = "n"
+
+    if profileRandnum:
+        profile["randnum"] = "y"
+    else:
+        profile["randnum"] = "n"
+
+    if profileLeetmode:
+        profile["leetmode"] = "y"
+    else:
+        profile["leetmode"] = "n"
+        
+    generate_wordlist_from_profile(profile)  # generate the wordlist
+
 
 def generate_wordlist_from_profile(profile):
     """ Generates a wordlist from a given profile """
@@ -390,8 +442,6 @@ def generate_wordlist_from_profile(profile):
                 profile["spechars"].append(spec1 + spec2)
                 for spec3 in chars:
                     profile["spechars"].append(spec1 + spec2 + spec3)
-
-    print("\r\n[+] Now making a dictionary...")
 
     # Now me must do some string modifications...
 
@@ -704,8 +754,8 @@ def generate_wordlist_from_profile(profile):
         for x in unique_list
         if len(x) < CONFIG["global"]["wcto"] and len(x) > CONFIG["global"]["wcfrom"]
     ]
-
-    print_to_file(profile["name"] + ".txt", unique_list_finished)
+    print(unique_list_finished)
+    #print_to_file(profile["name"] + ".txt", unique_list_finished)
 
 
 def download_http(url, targetfile):
@@ -1026,25 +1076,47 @@ def main():
     """Command-line interface to the cupp utility"""
 
     read_config(os.path.join(os.path.dirname(os.path.realpath(__file__)), "cupp.cfg"))
+    
+    #parser = get_parser()
+    #rgs = parser.parse_args()
 
-    parser = get_parser()
-    args = parser.parse_args()
+    #test out noninteractive mode with filler arguments
+    noninteractive(
+        name = "John",
+        profileSurname= "Smith",
+        profileNick= "big John",
+        profileBirthdate= "10101990",
+        profileWife= "Mary",
+        profileWifeNick= "",
+        profileWifeBirthdate= "01081991",
+        profileKid= "Nick",
+        profileKidNick= "Nicky",
+        profileKidBirthdate= "01012010",
+        profilePet= "Dog",
+        profileCompany= "Big John's Company",
+        profileWords= "lol",
+        profileSpechars1= True,
+        profileRandnum= False,
+        profileLeetmode= True
 
-    if not args.quiet:
-        print_cow()
+    )
 
-    if args.version:
-        version()
-    elif args.interactive:
-        interactive()
-    elif args.download_wordlist:
-        download_wordlist()
-    elif args.alecto:
-        alectodb_download()
-    elif args.improve:
-        improve_dictionary(args.improve)
-    else:
-        parser.print_help()
+
+    #if not args.quiet:
+    #    print_cow()
+
+    #if args.version:
+        #version()
+    #elif args.interactive:
+        #interactive()
+    #elif args.download_wordlist:
+        #download_wordlist()
+    #elif args.alecto:
+        #alectodb_download()
+    #elif args.improve:
+        #improve_dictionary(args.improve)
+    #else:
+        #parser.print_help()
 
 
 # Separate into a function for testing purposes
