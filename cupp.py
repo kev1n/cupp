@@ -754,7 +754,7 @@ def generate_wordlist_from_profile(profile):
         for x in unique_list
         if len(x) < CONFIG["global"]["wcto"] and len(x) > CONFIG["global"]["wcfrom"]
     ]
-    print(unique_list_finished)
+    return unique_list_finished
     #print_to_file(profile["name"] + ".txt", unique_list_finished)
 
 
